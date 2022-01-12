@@ -55,6 +55,8 @@ counter = 0
 total = 0
 alert = False
 start_time = 0
+last_blink = 0
+double_blink = 0
 frame = vs.read()
 
 # loop over the frames of video stream:
@@ -91,6 +93,7 @@ while (not fileStream) or (frame is not None):
             counter += 1
             if start_time == 0:
                 start_time = time.time()
+                last_blink = time.time()
             else:
                 end_time = time.time()
                 if end_time - start_time > 4:
@@ -98,6 +101,12 @@ while (not fileStream) or (frame is not None):
         else:
             if counter >= CONSEC_FRAMES_NUMBER:
                 total += 1
+                # if last blink happened within 0.6s ago, it's a double blink
+                if time.time()-last_blink <= 0.6:
+                    last_blink = time.time()
+                    double_blink += 1
+                else:
+                    last_blink = time.time()
             counter = 0
             start_time = 0
             alert = False
@@ -107,9 +116,14 @@ while (not fileStream) or (frame is not None):
                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
     cv2.putText(frame, "EAR: {:.2f}".format(ear), (500, 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+    cv2.putText(frame, "Double Blinks: {}".format(double_blink), (10, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+    # this part is redundant
+    """
     if alert:
         cv2.putText(frame, "ALERT!", (150, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+    """
     # show the frame
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1) & 0xFF
