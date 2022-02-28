@@ -37,8 +37,11 @@ for i in range(len(subject_data)):
     freq_list = []
     for k, data in subject_data[i].groupby('frequency'):
         freq_list.append(k)
-        d = data.sort_values('order').iloc[:1250, :-2].drop_duplicates()
-        data = filtfilt(b, a, d.to_numpy().T)
+        d = data.sort_values('order').iloc[:1250, :-2]  # .drop_duplicates()
+        d = d.to_numpy()
+        d = d - np.dot(np.ones((1250, 1)), np.mean(d))  # remove DC offset
+        data = filtfilt(b, a, d.T)
+        # exit(0)
         block_data.append(data.T)
         # print(np.shape(block_data))
     block_data = np.array(block_data, dtype=object)
