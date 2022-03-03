@@ -19,7 +19,7 @@ dbConnection = alchemyEngine.connect()
 
 df = pds.read_sql("select * from bci_collection", dbConnection)
 
-subject_id = 'S02'
+subject_id = 'S08'
 collection_ids = df.loc[df['collector_name'] == subject_id, 'id']
 
 subject_data = []
@@ -27,11 +27,15 @@ subject_data = []
 for collection_id in collection_ids:
     df = pds.read_sql(f"SELECT * FROM collected_data WHERE collection_id = {collection_id}", dbConnection)
     df.drop(['id', 'collection_time', 'collection_id', 'character', 'phase'], axis=1, inplace=True)
+    # print(df)
     subject_data.append(df)
+
+# del subject_data[1]
+# print(subject_data)
 
 # print(len(subject_data))
 all_data = []
-b, a = iirnotch(60.0, 30.0, fs=250.0)
+b, a = iirnotch(60.0, 10.0, fs=250.0)
 for i in range(len(subject_data)):
     block_data = []
     freq_list = []
@@ -48,7 +52,7 @@ for i in range(len(subject_data)):
     all_data.append(block_data)
 all_data = np.array(all_data)
 all_data = np.transpose(all_data, axes=(3, 2, 1, 0))
-savemat('Sub02.mat', {'data': all_data})
+savemat('Sub08.mat', {'data': all_data})
 
 # Close the database connection
 
