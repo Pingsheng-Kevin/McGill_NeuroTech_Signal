@@ -15,13 +15,14 @@ def build_template(mat_file_str, low_f=5.5, high_f=54.0):
         for index, freq in enumerate(np.around(np.arange(5.85, 10.651, 0.16), decimals=2))
     }
 
-    np.save('S08_template.npy', template_dict)
-    # plt.plot(template_dict.get(5.85+0.16*2)[:, 4])
-    # plt.show()
+    # np.save('S02_template.npy', template_dict)
+    # print(template_dict)
+    plt.plot(template_dict.get(5.85+0.16*5)[:, 4])
+    plt.show()
 
 
 if __name__ == '__main__':
-    file_name = 'S08_typeC.mat'
+    file_name = 'cleaned_S02_typeC.mat'
     build_template(file_name)
     # data = np.load('S08_template.npy', allow_pickle=True)
     # print(data)
