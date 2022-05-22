@@ -15,7 +15,7 @@ VERBOSE = True  # if True, prints some output to screen
 
 # runs that should not be included at all in the data
 # (e.g., if software was very laggy so we don't know if the data is any good)
-BAD_COLLECTION_IDS = [44, 80]
+BAD_COLLECTION_IDS = [44, 80, 112]
 REF_FREQ_MAP = {
     # add 0.001 to upper bound because np.arange() doesn't include endpoint
     # round to 2 decimal places to avoid mismatches due to numerical errors
