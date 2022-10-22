@@ -1,2 +1,0 @@
-This folder has four CCA methods. In the end, only standard_CCA is used.
-Reasons will be speficied in the paper.
